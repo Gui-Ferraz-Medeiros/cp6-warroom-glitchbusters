@@ -61,3 +61,13 @@ Representação de uma conta: `{ "titular": "...", "numero": 1001, "saldo": 0.00
 **Justificativa:** O defeito está no `getInstancia()`, que faz `new GeradorNumeroConta()` a cada chamada e reinicia o contador em 1001, quebrando o Singleton; guardar a instância (`if (instancia == null) instancia = new ...`) restaura a numeração sequencial única em ~30 min e preserva o contrato do número da conta. O trade-off é que não corrige as duplicatas já criadas (exigem auditoria depois), a unicidade continua dependendo da aplicação e não do banco (a sequence seria mais robusta, mas leva ~1 h) e esse `if` simples não é thread-safe sob requisições concorrentes.
 
 **Placar do grupo após esta decisão:** 🔥 8 · 💰 R$ 20 mil · 🧹 2
+
+---
+
+## O comprovante que aponta pra pessoa errada
+
+**Tipo:** Rodada 4 · **Voto:** B
+
+**Justificativa:** Os saldos estavam certos e só o registro do extrato foi gravado com `origem` e `destino` trocados no `new Transferencia(...)`; corrigir a gravação e reprocessar o histórico faz os comprovantes já emitidos voltarem corretos, preservando a integridade do dado que a auditoria vai consultar. O trade-off é ~2h de trabalho de madrugada e mais prejuízo (R$ 25 mil), em troca de não deixar dívida de dados para depois da Black Friday.
+
+**Placar do grupo após esta decisão:** 🔥 9 · 💰 R$ 45 mil · 🧹 1
