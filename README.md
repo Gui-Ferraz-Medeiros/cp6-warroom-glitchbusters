@@ -74,7 +74,6 @@ Representação de uma conta: `{ "titular": "...", "numero": 1001, "saldo": 0.00
 
 ---
 
-
 ## A fábrica que devolve null
 
 **Tipo:** Rodada 5 · **Voto:** C
@@ -82,3 +81,23 @@ Representação de uma conta: `{ "titular": "...", "numero": 1001, "saldo": 0.00
 **Justificativa:** Trocar o `default -> null` da `ContaFactory` por uma conta CORRENTE elimina o `null` que só explodia lá no `save()` ("Entity must not be null") e faz o cadastro da campanha funcionar na hora. O trade-off é pesado: o tipo inválido deixa de ser detectado e quem pediu UNIVERSITARIA fica com conta corrente (risco de troca de conta, reclamações e cashback perdido); o erro foi escondido em vez de tratado na origem com fail-fast, por isso a dívida técnica sobe.
 
 **Placar do grupo após esta decisão:** 🔥 9 · 💰 R$ 55 mil · 🧹 3
+
+---
+
+## O cadastro com metade dos campos
+
+**Tipo:** Evento Relâmpago C · **Voto:** C
+
+**Justificativa:** Aceitar `null` em CPF e tipo permite que a landing cadastre só com nome e saldo sem mexer na estrutura do construtor, a saída mais rápida para o pedido do marketing. O trade-off é que a invariante da conta (CPF e tipo obrigatórios) deixa de existir: o `null` se espalha e vira `NullPointerException` amanhã, inclusive no `switch (tipo)` da `ContaFactory`, que lança NPE com tipo nulo antes de chegar ao `default`. Um Builder com valores padrão e validação no `build()` teria concentrado isso, mas custava mais tempo na madrugada.
+
+**Placar do grupo após esta decisão:** 🔥 9 · 💰 R$ 55 mil · 🧹 4
+
+---
+
+## O teste vermelho às 03h45
+
+**Tipo:** Rodada 6 · **Voto:** B
+
+**Justificativa:** O teste `tedDeveCobrarTaxaDe5Reais` codifica o contrato com o cliente (TED = R$ 5,00) e o serviço usa o número mágico `50.00`: o vermelho é o sinal correto de que o código está errado. Investigar antes de subir permite corrigir a causa (extrair uma constante com o valor do contrato) em vez de desativar, ignorar ou alterar o teste para confirmar o bug. O trade-off é perder a janela de deploy das 04h, então as correções da noite só entram depois da abertura da campanha (🔥 −1, R$ 30 mil), mas os clientes não são cobrados R$ 50 em vez de R$ 5 na Black Friday.
+
+**Placar do grupo após esta decisão:** 🔥 8 · 💰 R$ 85 mil · 🧹 3
