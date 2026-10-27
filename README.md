@@ -25,3 +25,11 @@ Representação de uma conta: `{ "titular": "...", "numero": 1001, "saldo": 0.00
 **Placar inicial do grupo:** 🔥 7 · 💰 R$ 0 mil · 🧹 2
 
 ---
+
+## O saldo que virou negativo
+
+**Tipo:** rodada · **Voto:** D
+
+**Justificativa:** Voltar para a versão de terça remove na hora o código em que o `catch` engolia a `SaldoInsuficienteException` e deixava o `debitar(valor + taxa)` rodar sempre, restaurando a regra "saldo ≥ valor + taxa" sem escrever código novo de madrugada. O trade-off é que o rollback desfaz as 3 correções da semana (bugs antigos voltam), não corrige a causa raiz e não cria teste de regressão: a dívida técnica sobe e o conserto de verdade fica para segunda.
+
+**Placar do grupo após esta decisão:** 🔥 6 · 💰 R$ 15 mil · 🧹 3
