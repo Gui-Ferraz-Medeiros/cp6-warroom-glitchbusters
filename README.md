@@ -71,3 +71,14 @@ Representação de uma conta: `{ "titular": "...", "numero": 1001, "saldo": 0.00
 **Justificativa:** Os saldos estavam certos e só o registro do extrato foi gravado com `origem` e `destino` trocados no `new Transferencia(...)`; corrigir a gravação e reprocessar o histórico faz os comprovantes já emitidos voltarem corretos, preservando a integridade do dado que a auditoria vai consultar. O trade-off é ~2h de trabalho de madrugada e mais prejuízo (R$ 25 mil), em troca de não deixar dívida de dados para depois da Black Friday.
 
 **Placar do grupo após esta decisão:** 🔥 9 · 💰 R$ 45 mil · 🧹 1
+
+---
+
+
+## A fábrica que devolve null
+
+**Tipo:** Rodada 5 · **Voto:** C
+
+**Justificativa:** Trocar o `default -> null` da `ContaFactory` por uma conta CORRENTE elimina o `null` que só explodia lá no `save()` ("Entity must not be null") e faz o cadastro da campanha funcionar na hora. O trade-off é pesado: o tipo inválido deixa de ser detectado e quem pediu UNIVERSITARIA fica com conta corrente (risco de troca de conta, reclamações e cashback perdido); o erro foi escondido em vez de tratado na origem com fail-fast, por isso a dívida técnica sobe.
+
+**Placar do grupo após esta decisão:** 🔥 9 · 💰 R$ 55 mil · 🧹 3
