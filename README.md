@@ -101,3 +101,21 @@ Representação de uma conta: `{ "titular": "...", "numero": 1001, "saldo": 0.00
 **Justificativa:** O teste `tedDeveCobrarTaxaDe5Reais` codifica o contrato com o cliente (TED = R$ 5,00) e o serviço usa o número mágico `50.00`: o vermelho é o sinal correto de que o código está errado. Investigar antes de subir permite corrigir a causa (extrair uma constante com o valor do contrato) em vez de desativar, ignorar ou alterar o teste para confirmar o bug. O trade-off é perder a janela de deploy das 04h, então as correções da noite só entram depois da abertura da campanha (🔥 −1, R$ 30 mil), mas os clientes não são cobrados R$ 50 em vez de R$ 5 na Black Friday.
 
 **Placar do grupo após esta decisão:** 🔥 8 · 💰 R$ 85 mil · 🧹 3
+
+---
+
+## Go/No-Go da Black Friday
+
+**Tipo:** Rodada 7 · **Voto:** B
+
+**Justificativa:** Todo bug da noite passou pelo `TransferenciaService`, uma classe de ~80 linhas que mistura número de conta, taxa, extrato e saldo (responsabilidades demais). Como a suíte está saudável desde a R6, dá para corrigir o que a noite revelou com rede de segurança em vez de abrir com o problema estrutural intacto. O trade-off é abrir 2h atrasado e perder o início do pico (💰 +R$ 100 mil), em troca de reduzir a dívida técnica e evitar que "a correção de segunda nunca chegue".
+
+**Placar do grupo após esta decisão:** 🔥 9 · 💰 R$ 185 mil · 🧹 2
+
+---
+
+## Epílogo: perfil da noite (placar final congelado)
+
+**Placar final:** 🔥 9 · 💰 R$ 185 mil · 🧹 2
+
+**Perfil:** **A Noite dos Heróis** (🔥 7 ou mais e 🧹 até 2): o banco abriu, os clientes confiam e o time dorme (quase) em paz.
